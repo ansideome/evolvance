@@ -28,6 +28,7 @@ class AuthController extends Controller
         Mail::to($request->email)->send(new EmailVerificationMail($request, $otp));
 
         return response()->json([
+            'success' => true,
             'message' => 'User created successfully'
         ], 201);
     }
@@ -71,6 +72,7 @@ class AuthController extends Controller
         ]);
 
         return response()->json([
+            'success' => true,
             'message' => 'Email verified successfully'
         ], 200);
     }
