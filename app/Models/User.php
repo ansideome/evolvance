@@ -56,4 +56,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Submission::class);
     }
+
+    public function bootcamps()
+    {
+        return $this->belongsToMany(Bootcamp::class)->withPivot('payment_status')->withTimestamps();
+    }
 }

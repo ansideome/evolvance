@@ -12,7 +12,7 @@ class BootcampController extends Controller
         return response()->json(
             [
                 'success' => true,
-                'data' => Bootcamp::get(),
+                'data' => Bootcamp::with('softskills')->get(),
             ]
         );
     }
@@ -31,6 +31,7 @@ class BootcampController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
+            'image' => 'required|string',
             'description' => 'nullable|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
@@ -38,9 +39,21 @@ class BootcampController extends Controller
             'kuota' => 'required|integer',
             'tipe_pembelajaran' => 'required|string',
             'bidang_pekerjaan' => 'required|string',
+            'softskills' => 'nullable|array',
+            'softskills.*' => 'exists:softskills,id',
         ]);
 
-        $bootcamp = Bootcamp::create($request->all());
+        $bootcamp = Bootcamp::create($request->only([
+            'name',
+            'image',
+            'description',
+            'start_date',
+            'end_date',
+            'price',
+            'kuota',
+            'tipe_pembelajaran',
+            'bidang_pekerjaan'
+        ]));
 
         for ($i = 1; $i <= 8; $i++) {
             $bootcamp->weeks()->create([
@@ -51,9 +64,13 @@ class BootcampController extends Controller
             ]);
         }
 
+        if ($request->has('softskills')) {
+            $bootcamp->softskills()->sync($request->softskills);
+        }
+
         return response()->json([
-            'message' => 'Bootcamp created with 8 weeks',
-            'data' => $bootcamp->load('weeks'),
+            'message' => 'Bootcamp created with 8 weeks and skills (if provided)',
+            'data' => $bootcamp->load(['weeks', 'softskills']),
         ], 201);
     }
 }

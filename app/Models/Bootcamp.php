@@ -27,4 +27,9 @@ class Bootcamp extends Model
     {
         return $this->hasMany(Week::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class)->withPivot('payment_status')->withTimestamps();
+    }
 }
