@@ -51,4 +51,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
+    }
+
+    public function bootcamps()
+    {
+        return $this->belongsToMany(Bootcamp::class)->withPivot('payment_status')->withTimestamps();
+    }
 }
