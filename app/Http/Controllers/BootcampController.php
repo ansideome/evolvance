@@ -19,12 +19,15 @@ class BootcampController extends Controller
 
     public function show($id)
     {
-        return response()->json(
-            [
-                'success' => true,
-                'data' => Bootcamp::with('weeks')->find($id),
-            ]
-        );
+        return response()->json([
+            'success' => true,
+            'data' => Bootcamp::with([
+                'weeks',
+                'weeks.assignment',
+                'weeks.material',
+                'weeks.assignment.submissions',
+            ])->find($id),
+        ]);
     }
 
     public function store(Request $request)

@@ -18,7 +18,10 @@ class BootcampPurchaseController extends Controller
 
         $user->bootcamps()->attach($id, ['payment_status' => true]);
 
-        return response()->json(['message' => 'Bootcamp berhasil dibeli!']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Bootcamp berhasil dibeli!'
+        ]);
     }
 
     public function myBootcamps()
